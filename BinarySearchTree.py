@@ -76,6 +76,55 @@ class Node:
         print(self.value)
 
 
+child_nodes = []
+def print_nodes_with_one_child(root):
+    if not root:
+        return
+
+    if not root.left and root.right:
+        child_nodes.append(root)
+    elif root.left and not root.right:
+        child_nodes.append(root)
+
+    print_nodes_with_one_child(root.left)
+
+    print_nodes_with_one_child(root.right)
+
+    return
+
+# Write to list every child node of the parameter root node.
+def childs_tolist(actual_node, list):
+    if not actual_node:
+        return
+    if actual_node.right:
+        list.append(actual_node.right)
+    if actual_node.left:
+        list.append(actual_node.left)
+
+    childs_tolist(actual_node.left, list)
+
+    childs_tolist(actual_node.right, list)
+
+    return
+
+# Check the tree is contains the parameter node, and write every child of this node into a list.
+def node_childs_tolist(root, contain_node):
+    child_nodes_tolist = []
+    if contain_node == root.value:
+        childs_tolist(actual_node=root, list=child_nodes_tolist)
+        return child_nodes_tolist
+    elif contain_node < root.value:
+        if root.left is None:
+            return []
+        else:
+            return node_childs_tolist(root.left, contain_node)
+    else:
+        if root.right is None:
+            return []
+        else:
+            return node_childs_tolist(root.right, contain_node)
+
+
 def main():
     #      50
     #    /      \
@@ -89,7 +138,7 @@ def main():
     node.insert(40)
     node.insert(70)
     node.insert(60)
-    node.insert(80)
+    # node.insert(80)
 
     print("Preorder: ---------")
     node.preorder()
@@ -103,11 +152,25 @@ def main():
     print(node.contains(90))
     print(node.contains(70))
     print("")
-    node.delete(20)
-    node.delete(30)
-    node.delete(50)
+    # node.delete(20)
+    # node.delete(30)
+    # node.delete(50)
     print("Inorder after delete: ")
     node.inorder()
+
+    print("")
+    print("Has Only One Child:")
+    print_nodes_with_one_child(node)
+    for i in child_nodes:
+        print(i.value, end=" ")
+    print()
+
+    print("")
+    print("Childs of the node:")
+    result = node_childs_tolist(node, 30)
+    for i in result:
+        print(i.value, end=" ")
+    print()
 
 
 if __name__ == "__main__":
